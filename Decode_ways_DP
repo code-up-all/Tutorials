@@ -1,0 +1,104 @@
+#include <iostream>
+
+using namespace std;
+#include<algorithm> // for find_if
+#include<vector>    // for vector
+#include<string>   // for to_string
+#include <cstring>   // for memset
+class Solution {
+public:
+    
+    int num(int * const &dp, int low, int high, vector<pair<char,int>> &dict, string &s, int len){
+        
+        if(low>high)
+            return 1;
+        if(low==high){
+            *(dp + len*low + high) = 1;
+            return 1;
+        }
+            
+        if(*(dp + len*low + high) != -1)
+            return *(dp+ len*low + high);
+        *(dp + len*low + high) = 0;
+        for(int i = low; i<=low+1; i++){
+            
+            string first;
+            
+            
+            if(i-low==1){
+                   vector<char> v;
+                   v.push_back(s[i-1]);
+                   v.push_back(s[i]);
+                   //first = s[i-1] + s[i]; 
+                   cout<<v.data()<<"\n";
+                   first= v.data();
+                }
+                
+            else{
+                    first = s[i];
+                    cout<<first<<"\n";
+                }
+                   
+            vector<pair<char,int>>::iterator it;
+           
+        
+            it = find_if(dict.begin(), dict.end(), [first](pair<char,int> d) { return to_string(d.second) == first;});
+                if(it!=dict.end()){
+                    *(dp + len*low + high) += 1 * num(dp, i+1, high, dict, s, len);
+                    cout<<"Satisfied with low = "<<low<<" : "<< *(dp + len*low + high) << "\n";
+                }
+         }
+        return *(dp + len*low + high);
+    }
+    int numDecodings(string s) {
+         
+        int len = s.size();
+        int dp[len][len];
+        memset(dp, -1, sizeof(dp));
+        
+        
+        vector<pair<char,int>> dict;
+        dict.push_back(make_pair('A',1));
+        dict.push_back(make_pair('B',2));
+        dict.push_back(make_pair('C',3));
+        dict.push_back(make_pair('D',4));
+        dict.push_back(make_pair('E',5));
+        dict.push_back(make_pair('F',6));
+        dict.push_back(make_pair('G',7));
+        dict.push_back(make_pair('H',8));
+        dict.push_back(make_pair('I',9));
+        dict.push_back(make_pair('J',10));
+        dict.push_back(make_pair('K',11));
+        dict.push_back(make_pair('L',12));
+        dict.push_back(make_pair('M',13));
+        dict.push_back(make_pair('N',14));
+        dict.push_back(make_pair('O',15));
+        dict.push_back(make_pair('P',16));
+        dict.push_back(make_pair('Q',17));
+        dict.push_back(make_pair('R',18));
+        dict.push_back(make_pair('S',19));
+        dict.push_back(make_pair('T',20));
+        dict.push_back(make_pair('U',21));
+        dict.push_back(make_pair('V',22));
+        dict.push_back(make_pair('W',23));
+        dict.push_back(make_pair('X',24));
+        dict.push_back(make_pair('Y',25));
+        dict.push_back(make_pair('Z',26));
+        
+        
+        int k=0;
+        k = num(dp[0], 0 , len - 1, dict, s, len);
+        return k;
+        
+        
+    }
+};
+
+int main()
+{
+    
+    Solution obj;
+    int k = obj.numDecodings("1221");
+    cout<<"\nDecode ways = "<<k;
+    return 0;
+}
