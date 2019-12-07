@@ -1,0 +1,31 @@
+#include <iostream>
+#include<map>   // works for both map and multimap
+
+
+using namespace std;
+
+int main() {
+    map<char,int> table;
+    map<char,int>::iterator it;
+    multimap<char,int> t1;
+    multimap<char,int>:: iterator it2;
+    table['B']=2;
+    table.insert(make_pair('A', 1));
+    table.insert(make_pair('L', 12));
+    table.insert(make_pair('Z', 26));
+    table.insert(make_pair('Z', 27));  // doesn't work as insert is not for updating
+    table['Z']=27;   // this works for updating
+    for(it=table.begin(); it!=table.end(); it++){
+        cout<< it->first <<" -> "<<it->second<<"\n";   // Map is always sorted on key, implements red black tree
+    }
+   
+   //With multimap, one key can be mapped to different values
+    t1.insert(make_pair('A', 1));
+    t1.insert(make_pair('A', 2));
+    t1.insert(make_pair('C', 5));
+    t1.insert(make_pair('A', 10));
+    cout<<"\n";
+     for(it2=t1.begin(); it2!=t1.end(); it2++){
+        cout<< it2->first <<" -> "<<it2->second<<"\n";   //Multi Map is always sorted on key, implements red black tree
+    }
+}
