@@ -1,0 +1,61 @@
+#include <iostream>
+
+using namespace std;
+#include<algorithm> // for find_if
+#include<vector>    // for vector
+#include<string>   // for to_string
+#include <cstring>   // for memset
+struct ListNode {
+      int val;
+      ListNode *next;
+      ListNode(int x) : val(x), next(NULL) {}
+ };
+class Solution {
+public:
+    
+    ListNode* reverseList(ListNode* head) {
+        ListNode* temp = head;
+        ListNode *t1;
+        ListNode *t0 = NULL;
+        
+        while(temp!=NULL){     // Iterative solution
+            t1 = temp->next;
+            temp->next = t0;
+            t0 = temp;
+            temp = t1;
+        }
+        
+        return t0;
+        
+    }
+    
+    ListNode* reverse2(ListNode* head){
+        if(head==NULL || head->next==NULL)
+            return head;
+        ListNode* t = reverse2(head->next);
+        head->next->next = head;
+        head->next = NULL;
+        return t;
+        
+    }
+};
+int main(){
+ Solution obj;
+ ListNode* l = new ListNode(1);
+ l->next = new ListNode(2);
+ l->next->next = new ListNode(3);
+ l->next->next->next = new ListNode(4);
+ l->next->next->next->next = new ListNode(5);
+ ListNode* t = obj.reverseList(l);
+ while(t!=NULL){
+     cout<<t->val<<" ";
+     t = t->next;
+ }
+ 
+ t = obj.reverse2(l);
+ while(t!=NULL){
+     cout<<t->val<<" ";
+     t = t->next;
+ }
+ 
+}
