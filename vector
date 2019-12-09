@@ -1,0 +1,24 @@
+#include <iostream>
+
+using namespace std;
+#include<algorithm> // for find_if
+#include<vector>    // for vector
+#include<string>   // for to_string
+#include <cstring>   // for memset
+int main(){
+vector<int>::iterator it;
+vector<int> v1(5);
+v1.push_back(1);
+v1.push_back(2);
+v1.push_back(3);
+v1.push_back(4);
+v1.push_back(5);
+for(int i = 0; i<5; i++){    // i<v1.size() results in infinite loop as v1.size() keeps on increasing on adding elements
+    v1.push_back(i+1);
+}
+vector<int> v2(v1);
+
+for(it= v1.begin(); it!=v1.end(); it++){
+    cout<<*it<<"\n";
+}
+}
