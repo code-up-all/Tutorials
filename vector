@@ -21,4 +21,15 @@ vector<int> v2(v1);
 for(it= v1.begin(); it!=v1.end(); it++){
     cout<<*it<<"\n";
 }
+
+vector<string> v3(10, "5");
+vector<int> v4(5, 1);
+
+for(it= v4.begin(); it!=v4.end(); it++){
+    cout<<*it<<"\n";
+}
+for(vector<string>::iterator it= v3.begin(); it!=v3.end(); it++){
+    cout<<*it<<"\n";
+}
+
 }
