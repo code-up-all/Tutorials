@@ -22,26 +22,32 @@ void store(struct meshNode* node,int r, int c, int value,int rlim, int clim, int
   int lastDays[] ={31,29,31,30,31,30,31,31,30,31,30,31 };
 //Wrapping up rule
   
-  if(r>rlim || c>clim){
+  if(r>rlim || c>clim || value>lastDays[month]){
    return;
   }
-  if(r==0 && c<firstDay){
-   if(lastDay<= lastDays[month] && visited[r][c]==-1){
-     node->val = lastDay;
-     lastDay = lastDay + 1;
-     visited[r][c]==1;
-   //  cout<<"lastday"<< node->val<<" ";
-   }
-   store(node->horizontal, r, c+1, value,rlim, clim, firstDay, month, lastDay,visited);
-   store(node->vertical, r+1, c, 8 - (firstDay - c),rlim, clim, firstDay, month, lastDay,visited);
-  }
-  //cout<<"node value"<< node->val;
+ 
   if(visited[r][c]==-1){
+   if(r==0 && c<firstDay){
+       if(lastDay <= lastDays[month]){
+           node->val = lastDay;
+           lastDay = lastDay + 1;
+       }
+       visited[r][c]==1;
+       store(node->horizontal, r, c+1, value,rlim, clim,firstDay, month,lastDay,visited);
+       store(node->vertical, r+1, c, 8 - (firstDay - c),rlim, clim, firstDay, month,lastDay,visited);
+   }
+   if((r==0 && c>=firstDay) || r>0){
   node->val = value;
   visited[r][c]==1;
-  }
   store(node->horizontal, r, c+1, value + 1,rlim, clim,firstDay, month,lastDay,visited);
   store(node->vertical, r+1, c, value + 7,rlim, clim, firstDay, month,lastDay,visited);
+  }
+  
+      
+  }
+  
+  
+  
 }
 void storemonth(struct meshNode* start, int month, int firstDay){
   // We need to get to the starting point of the month first
@@ -75,7 +81,7 @@ void traverse(struct meshNode* start, int r,int c, int rlim, int clim, int visit
     visited[r][c] = 1;
     cout<< "\n";
     return;
-  }
+  }                                                       
   if(visited[r][c]==1){
    return;
   }
@@ -115,6 +121,7 @@ void neatprint(struct meshNode* start, int month){
 int main(){
    struct meshNode* start;
    initcal(&start, 0, 0);
+   //neatprint(start, 0);
    int month = 0;
    int firstDay = 6;
    storemonth(start, month, firstDay);
