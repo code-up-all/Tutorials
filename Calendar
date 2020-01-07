@@ -1,0 +1,124 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+struct meshNode{
+ int val;
+ meshNode* horizontal;
+ meshNode* vertical;
+ meshNode(int x):val(x), horizontal(NULL), vertical(NULL) {}
+};
+void initcal(struct meshNode** start, int r, int c){
+  if(r>=0 && r<5 && c>=0 && c<7){
+   *start = new meshNode(0);
+   initcal(&((*start) -> horizontal), r, c+1);
+   initcal(&((*start) -> vertical), r+1, c);
+}
+ else
+  return;
+}
+
+void store(struct meshNode* node,int r, int c, int value,int rlim, int clim, int firstDay, int month, int lastDay, int visited[][7]){
+ 
+  int lastDays[] ={31,29,31,30,31,30,31,31,30,31,30,31 };
+//Wrapping up rule
+  
+  if(r>rlim || c>clim){
+   return;
+  }
+  if(r==0 && c<firstDay){
+   if(lastDay<= lastDays[month] && visited[r][c]==-1){
+     node->val = lastDay;
+     lastDay = lastDay + 1;
+     visited[r][c]==1;
+   //  cout<<"lastday"<< node->val<<" ";
+   }
+   store(node->horizontal, r, c+1, value,rlim, clim, firstDay, month, lastDay,visited);
+   store(node->vertical, r+1, c, 8 - (firstDay - c),rlim, clim, firstDay, month, lastDay,visited);
+  }
+  //cout<<"node value"<< node->val;
+  if(visited[r][c]==-1){
+  node->val = value;
+  visited[r][c]==1;
+  }
+  store(node->horizontal, r, c+1, value + 1,rlim, clim,firstDay, month,lastDay,visited);
+  store(node->vertical, r+1, c, value + 7,rlim, clim, firstDay, month,lastDay,visited);
+}
+void storemonth(struct meshNode* start, int month, int firstDay){
+  // We need to get to the starting point of the month first
+  int row, col;
+  row = (month/3) * 5;
+  col = (month%3) * 7;
+  int rlim, clim; // row and column limits for the month
+  rlim = row + 4;
+  clim = col + 6;
+  int visited[5][7];
+  memset(visited, -1, sizeof(visited));
+  for(int i = 0; i<row; i++)
+  {
+      start = start->vertical;
+   }
+   for(int j = 0; j<col; j++){
+      start = start->horizontal;
+   }
+   int lastDay = 28 + ( 6 - firstDay) + 1;
+   lastDay = lastDay + 1;
+  store(start,  row, col, 1, rlim, clim, firstDay, month, lastDay, visited);
+}
+
+void traverse(struct meshNode* start, int r,int c, int rlim, int clim, int visited[][7]){
+ 
+  if(start==NULL){
+   return;
+   }
+  if(c == clim){
+    cout<< start->val << "\t";
+    visited[r][c] = 1;
+    cout<< "\n";
+    return;
+  }
+  if(visited[r][c]==1){
+   return;
+  }
+ 
+  if(visited[r][c]==-1){
+  cout<< start->val << "\t";
+  visited[r][c] = 1;
+  traverse(start->horizontal, r, c+1, rlim, clim, visited);
+}
+  if(r<rlim && c==0){
+   traverse(start->vertical, r+1, c, rlim, clim, visited);
+  }
+}
+void neatprint(struct meshNode* start, int month){
+  int row, col;
+  row = (month/3)* 5;
+  col = (month%3) * 7;
+  int rlim, clim; // row and column limits for the month
+  rlim = row + 4;
+  clim = col + 6;
+  for(int i = 0; i<row; i++)
+  {   if(start!=NULL){
+      start = start->vertical;
+      }
+   }
+   for(int j = 0; j<col; j++){
+      if(start!=NULL){
+      start = start->horizontal;
+    }
+    }
+    int visited[5][7];
+    memset(visited, -1, sizeof(visited));
+    traverse(start,row,col,rlim,clim, visited);
+   
+}
+
+int main(){
+   struct meshNode* start;
+   initcal(&start, 0, 0);
+   int month = 0;
+   int firstDay = 6;
+   storemonth(start, month, firstDay);
+   neatprint(start, month);
+  // neatprint(start, 0);
+   return 0;
+}
